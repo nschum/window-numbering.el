@@ -1,6 +1,6 @@
 ;;; window-numbering --- Numbered window shortcuts
 ;;
-;; Copyright (C) 2006-2007 Nikolaj Schumacher <bugs * nschum , de>
+;; Copyright (C) 2006-2007, 2013 Nikolaj Schumacher <bugs * nschum , de>
 ;;
 ;; Author: Nikolaj Schumacher <bugs * nschum de>
 ;; Version: 1.1.1
