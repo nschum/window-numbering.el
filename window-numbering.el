@@ -37,6 +37,8 @@
 ;;
 ;;; Changes Log:
 ;;
+;;    Add face for window number.  (thanks to Chen Bin)
+;;
 ;; 2008-04-11 (1.1.1)
 ;;    Added possibility to delete window with prefix arg.
 ;;    Cleaned up code and migrated to `defcustom'.
@@ -78,6 +80,11 @@ return a number to have it assigned to the current-window, nil otherwise."
 
 (defconst window-numbering-mode-line-position 1
   "The position in the mode-line `window-numbering-mode' displays the number.")
+
+(defface window-numbering-face
+  '((t :inherit mode-line))
+  "Face used for the number in the mode-line."
+  :group 'window-numbering)
 
 (defun select-window-by-number (i &optional arg)
   "Select window given number I by `window-numbering-mode'.
@@ -163,7 +170,8 @@ windows to numbers."
       (window-numbering-assign window))))
 
 (defun window-numbering-get-number-string (&optional window)
-  (int-to-string (window-numbering-get-number window)))
+  (let ((s (int-to-string (window-numbering-get-number window))))
+    (propertize s 'face 'window-numbering-face)))
 
 (defun window-numbering-get-number (&optional window)
   (gethash (or window (selected-window))
