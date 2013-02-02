@@ -82,8 +82,7 @@ return a number to have it assigned to the current-window, nil otherwise."
 (defconst window-numbering-mode-line-position 1
   "The position in the mode-line `window-numbering-mode' displays the number.")
 
-(defface window-numbering-face
-  '((t :inherit mode-line))
+(defface window-numbering-face '()
   "Face used for the number in the mode-line."
   :group 'window-numbering)
 
