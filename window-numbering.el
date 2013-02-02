@@ -37,6 +37,7 @@
 ;;
 ;;; Changes Log:
 ;;
+;;    Fix numbering in terminal mode with menu bar visible.
 ;;    Add face for window number.  (thanks to Chen Bin)
 ;;
 ;; 2008-04-11 (1.1.1)
@@ -156,7 +157,7 @@ windows to numbers."
   (when (and window-numbering-auto-assign-0-to-minibuffer
              (active-minibuffer-window))
     (window-numbering-assign (active-minibuffer-window) 0))
-  (let ((windows (window-list nil 0 (window-at 0 0))))
+  (let ((windows (window-list nil 0 (frame-first-window))))
     (run-hook-with-args 'window-numbering-before-hook windows)
     (when window-numbering-assign-func
       (mapc `(lambda (window)
