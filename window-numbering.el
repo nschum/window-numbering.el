@@ -3,7 +3,7 @@
 ;; Copyright (C) 2006-2007, 2013 Nikolaj Schumacher <bugs * nschum , de>
 ;;
 ;; Author: Nikolaj Schumacher <bugs * nschum de>
-;; Version: 1.1.1
+;; Version: 1.1.2
 ;; Keywords: faces, matching
 ;; URL: http://nschum.de/src/emacs/window-numbering-mode/
 ;; Compatibility: GNU Emacs 22.x, GNU Emacs 23.x, GNU Emacs 24.x
@@ -37,6 +37,7 @@
 ;;
 ;;; Changes Log:
 ;;
+;; 2013-03-23 (1.1.2)
 ;;    Fix numbering in terminal mode with menu bar visible.
 ;;    Add face for window number.  (thanks to Chen Bin)
 ;;
