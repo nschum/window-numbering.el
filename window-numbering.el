@@ -87,6 +87,9 @@ return a number to have it assigned to the current-window, nil otherwise."
   "Face used for the number in the mode-line."
   :group 'window-numbering)
 
+(defvar window-numbering-table nil
+  "table -> (window vector . number table)")
+
 (defun select-window-by-number (i &optional arg)
   "Select window given number I by `window-numbering-mode'.
 If prefix ARG is given, delete the window instead of selecting it."
@@ -106,9 +109,6 @@ If prefix ARG is given, delete the window instead of selecting it."
            ,(format "Select the window with number %i." i)
            (interactive "P")
            (select-window-by-number ,i arg))))
-
-(defvar window-numbering-table nil
-  "table -> (window vector . number table)")
 
 (defun window-numbering-calculate-left (windows)
   (let ((i 9) left)
