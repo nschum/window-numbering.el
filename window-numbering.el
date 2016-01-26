@@ -165,7 +165,7 @@ windows to numbers."
       (mapc `(lambda (window)
                (with-selected-window window
                  (with-current-buffer (window-buffer window)
-                   (let ((num (funcall ,window-numbering-assign-func)))
+                   (let ((num (funcall window-numbering-assign-func)))
                      (when num
                        (window-numbering-assign window num))))))
             windows))
