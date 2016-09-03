@@ -75,6 +75,13 @@ If you want to assign a number to just one buffer, use
   :group 'window-numbering
   :type 'hook)
 
+(defcustom window-numbering-select-window-hook nil
+  "*Hook called after `select-window-by-number` is called.
+Useful when there are other window related actions involved
+like resizing with `golden-ratio'."
+  :group 'window-numbering
+  :type 'hook)
+
 (defcustom window-numbering-assign-func nil
   "*Function called for each window by `window-numbering-mode'.
 This is called before automatic assignment begins.  The function should
@@ -100,10 +107,12 @@ If prefix ARG is given, delete the window instead of selecting it."
   (let ((windows (car (gethash (selected-frame) window-numbering-table)))
         window)
     (if (and (>= i 0) (< i 10)
-             (setq window (aref windows i)))
-        (if arg
-            (delete-window window)
-          (select-window window))
+           (setq window (aref windows i)))
+        (prog1
+            (if arg
+                (delete-window window)
+              (select-window window))
+          (run-hooks 'window-numbering-select-window-hook))
       (error "No window numbered %s" i))))
 
 ;; define interactive functions for keymap
