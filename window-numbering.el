@@ -208,6 +208,8 @@ windows to numbers."
           (add-hook 'minibuffer-setup-hook 'window-numbering-update)
           (add-hook 'window-configuration-change-hook
                     'window-numbering-update)
+          (add-hook 'minibuffer-setup-hook
+                    'window-numbering-update)
           (dolist (frame (frame-list))
             (select-frame frame)
             (window-numbering-update))))
