@@ -93,6 +93,9 @@ return a number to have it assigned to the current-window, nil otherwise."
 (defvar window-numbering-table nil
   "table -> (window vector . number table)")
 
+(defvar window-numbering-previous-windows nil
+  "table -> previous-windows")
+
 (defun select-window-by-number (i &optional arg)
   "Select window given number I by `window-numbering-mode'.
 If prefix ARG is given, delete the window instead of selecting it."
@@ -103,8 +106,21 @@ If prefix ARG is given, delete the window instead of selecting it."
              (setq window (aref windows i)))
         (if arg
             (delete-window window)
-          (select-window window))
+          (progn (puthash (selected-frame)
+			  (frame-selected-window)
+			  window-numbering-previous-windows)
+                 (select-window window)))
       (error "No window numbered %s" i))))
+
+(defun window-numbering-select-previous-window ()
+  "Select the last selected window"
+  (interactive)
+  (let ((window (gethash (selected-frame) window-numbering-previous-windows)))
+    (when window
+      (puthash (selected-frame)
+	       (frame-selected-window)
+	       window-numbering-previous-windows)
+      (select-window window))))
 
 ;; define interactive functions for keymap
 (dotimes (i 10)
@@ -152,11 +168,15 @@ Optional parameter PREASSIGNED-WINDOWS is a hashmap already mapping some
 windows to numbers."
   (setq window-numbering-windows (make-vector 10 nil)
         window-numbering-numbers (make-hash-table :size 10)
+	window-numbering-previous-windows (make-hash-table :size 10)
         window-numbering-left
         (window-numbering-calculate-left window-numbering-windows))
   (puthash (selected-frame)
            (cons window-numbering-windows window-numbering-numbers)
            window-numbering-table)
+  (puthash (selected-frame)
+	   (frame-selected-window)
+	   window-numbering-previous-windows)
   (when (and window-numbering-auto-assign-0-to-minibuffer
              (active-minibuffer-window))
     (window-numbering-assign (active-minibuffer-window) 0))
@@ -204,6 +224,7 @@ windows to numbers."
       (unless window-numbering-table
         (save-excursion
           (setq window-numbering-table (make-hash-table :size 16))
+	  (setq window-numbering-previous-windows (make-hash-table :size 16))
           (window-numbering-install-mode-line)
           (add-hook 'minibuffer-setup-hook 'window-numbering-update)
           (add-hook 'window-configuration-change-hook
@@ -215,7 +236,8 @@ windows to numbers."
     (remove-hook 'minibuffer-setup-hook 'window-numbering-update)
     (remove-hook 'window-configuration-change-hook
                  'window-numbering-update)
-    (setq window-numbering-table nil)))
+    (setq window-numbering-table nil)
+    (setq window-numbering-previous-windows nil)))
 
 (defun window-numbering-install-mode-line (&optional position)
   "Install the window number from `window-numbering-mode' to the mode-line."
