@@ -82,6 +82,11 @@ return a number to have it assigned to the current-window, nil otherwise."
   :group 'window-numbering
   :type 'function)
 
+(defcustom window-numbering-mode-line nil
+  "Control whether to display window number in the mode line."
+  :group 'window-numbering
+  :type 'boolean)
+
 (defconst window-numbering-mode-line-position 1
   "The position in the mode-line `window-numbering-mode' displays the number.")
 
@@ -204,14 +209,14 @@ windows to numbers."
       (unless window-numbering-table
         (save-excursion
           (setq window-numbering-table (make-hash-table :size 16))
-          (window-numbering-install-mode-line)
+          (when window-numbering-mode-line window-numbering-install-mode-line)
           (add-hook 'minibuffer-setup-hook 'window-numbering-update)
           (add-hook 'window-configuration-change-hook
                     'window-numbering-update)
           (dolist (frame (frame-list))
             (select-frame frame)
             (window-numbering-update))))
-    (window-numbering-clear-mode-line)
+    (when window-numbering-mode-line window-numbering-clear-mode-line)
     (remove-hook 'minibuffer-setup-hook 'window-numbering-update)
     (remove-hook 'window-configuration-change-hook
                  'window-numbering-update)
